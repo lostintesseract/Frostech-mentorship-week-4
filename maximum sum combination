@@ -1,0 +1,43 @@
+from heapq import heappush, heappop
+
+class Solution:
+    # @param A : list of integers
+    # @param B : list of integers
+    # @param C : integer
+    # @return a list of integers
+    def solve(self, A, B, C):
+        A.sort()
+        B.sort()
+        # print A
+        # print B
+        ans = []
+        N = len(A)
+
+        pq = []
+        my_set = set()
+
+        heappush(pq, [-(A[N - 1] + B[N - 1]), (N - 1, N - 1)])
+        my_set.add((N - 1, N - 1))
+
+        for count in range(C):
+            temp = heappop(pq)
+            ans.append(-temp[0])
+
+            i = temp[1][0]
+            j = temp[1][1]
+
+            if i >= 1:
+                sm = A[i - 1] + B[j]
+                temp1 = (i - 1, j)
+                if temp1 not in my_set:
+                    heappush(pq, [-sm, temp1])
+                    my_set.add(temp1)
+
+            if j >= 1:
+                sm = A[i] + B[j - 1]
+                temp2 = (i, j - 1)
+                if temp2 not in my_set:
+                    heappush(pq, [-sm, temp2])
+                    my_set.add(temp2)
+
+        return ans
